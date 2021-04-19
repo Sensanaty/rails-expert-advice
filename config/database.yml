@@ -1,13 +1,26 @@
-development:
+default: &default
   adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  password: <%= Rails.application.credentials.DB[:PASSWORD] %>
+
+development:
+  <<: *default
   database: expert_advice_dev
   host: localhost
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: sensanaty
   timeout: 5000
 
 test:
-  adapter: postgresql
+  <<: *default
   database: expert_advice_test
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: localhost
+  username: sensanaty
   min_messages: WARNING
+
+production:
+  <<: *default
+  database: expert_advice_prod
+  host: <%= Rails.application.credentials.DB[:HOST] %>
+  username: <%= Rails.application.credentials.DB[:USERNAME] %>
+  timeout: 5000
