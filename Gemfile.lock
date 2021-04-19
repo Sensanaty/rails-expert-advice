@@ -82,7 +82,9 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (0.9.0)
-    mimemagic (0.3.2)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -90,6 +92,7 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
+    pagy (3.12.0)
     parallel (1.12.1)
     parser (2.5.1.2)
       ast (~> 2.4.0)
@@ -158,6 +161,8 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
+    rubocop-performance (1.0.0)
+      rubocop (>= 0.58.0)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     spring (2.0.2)
@@ -193,6 +198,7 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   doorkeeper
   listen (>= 3.0.5, < 3.2)
+  pagy
   pg
   pry
   puma (~> 3.11)
@@ -201,12 +207,13 @@ DEPENDENCIES
   redis (~> 4.0)
   rspec-rails
   rubocop
+  rubocop-performance
   spring
   spring-watcher-listen (~> 2.0.0)
   validates_email_format_of
 
 RUBY VERSION
-   ruby 2.4.0p0
+   ruby 2.6.7p197
 
 BUNDLED WITH
-   2.0.1
+   2.2.16
