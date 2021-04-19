@@ -1,14 +1,9 @@
-require: rubocop-performance
-
 inherit_from: .rubocop_todo.yml
 
 Style/FrozenStringLiteralComment:
   Enabled: false
 
 Naming/VariableNumber:
-  Enabled: false
-
-Performance/FixedSize:
   Enabled: false
 
 Lint/AmbiguousBlockAssociation:
