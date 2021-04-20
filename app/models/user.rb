@@ -6,4 +6,5 @@ class User < ApplicationRecord
   has_many :user_account_accesses
   has_many :accounts, through: :user_account_accesses
   has_many :questions, dependent: :nullify
+  has_many :answers, dependent: :nullify
 end
