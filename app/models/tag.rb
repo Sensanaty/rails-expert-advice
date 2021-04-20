@@ -1,5 +1,5 @@
 class Tag < ApplicationRecord
-  before_save -> (tag) { tag.name.downcase! }
+  before_save ->(tag) { tag.name.downcase! }
   validates :name, presence: true
   validate :name_format
 

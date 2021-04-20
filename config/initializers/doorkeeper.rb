@@ -5,9 +5,7 @@ Doorkeeper.configure do
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_from_credentials do
     user = User.find_by_email(params[:username])
-    if user
-      user.authenticate(params[:password]) || nil
-    end
+    user.authenticate(params[:password]) || nil if user
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
