@@ -25,9 +25,11 @@ question = Question.create(
 
 puts "Creating a tag belonging to the question"
 tag = question.tags.create(name: "question-tag")
+second_tag = question.tags.create(name: "second-tag")
 
 puts "\nUser: #{user.inspect}"
 puts "Question: #{question.inspect}"
 puts "Tag: #{tag.inspect}"
+puts "Second Tag: #{second_tag.inspect}"
 
 puts "Seeding done!"
