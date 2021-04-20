@@ -18,6 +18,7 @@ gem 'doorkeeper'
 # API
 gem 'rack-cors'
 gem 'active_model_serializers'
+gem 'jsonapi-serializer'
 gem 'validates_email_format_of'
 gem 'api-pagination'
 gem 'pagy'
