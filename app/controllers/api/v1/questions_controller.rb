@@ -26,10 +26,11 @@ class Api::V1::QuestionsController < Api::V1::ApiController
     render json: QuestionSerializer.new(@question).serializable_hash.to_json
   end
 
-  # TODO: make deleting/changing tags is possible
   def update
     if @question.update_attributes(title: params[:title] || @question.title,
                                    content: params[:content] || @question.content)
+
+      modify_question_tags(@question.tags, params[:tags])
       render json: QuestionSerializer.new(@question).serializable_hash.to_json, status: :ok
     else
       render json: { error: @question.errors }, status: :unprocessable_entity
@@ -62,6 +63,18 @@ class Api::V1::QuestionsController < Api::V1::ApiController
       render json: { error: "Must be logged in to modify or delete questions" }, status: :unauthorized
     elsif @question.user != current_user
       render json: { error: "This user is not authorized to modify or delete this question" }, status: :unauthorized
+    end
+  end
+
+  # Modifies the tags belonging to the question if a user supplies different ones than are currently present
+  # @param current_tags [ActiveRecord::Associations::CollectionProxy] collection of the current question tags
+  # @param tag_names [ActionController::Parameters] tag names supplied via params
+  def modify_question_tags(current_tags, tag_names)
+    if tag_names
+      # Not perfect, but there's only a max of 5 tags so it's not a massive issue. Probably better to check whether
+      # there's a difference between the old and newly supplied tags, but this'll do for now.
+      current_tags.destroy_all
+      @question.tags.create(tag_names.map { |tag| { name: tag } })
     end
   end
 end
