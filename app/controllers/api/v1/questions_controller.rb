@@ -4,8 +4,8 @@ class Api::V1::QuestionsController < Api::V1::ApiController
   before_action :authorize_owner, only: [:update, :destroy]
 
   def index
-    @questions = Question.all
-    render json: QuestionSerializer.new(@questions).serializable_hash.to_json
+    @pagy, @questions = pagy(Question.all)
+    render json: QuestionSerializer.new(@questions, meta: { pagy: pagy_metadata(@pagy) }).serializable_hash.to_json
   end
 
   def create

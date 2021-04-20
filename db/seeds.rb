@@ -27,6 +27,17 @@ puts "Creating a tag belonging to the question"
 tag = question.tags.create(name: "question-tag")
 second_tag = question.tags.create(name: "second-tag")
 
+puts "Creating 50 questions with random content"
+
+50.times do
+  random_question = Question.create(
+    title: Faker::Quote.famous_last_words,
+    content: Faker::Lorem.sentence(word_count: 30, random_words_to_add: 15),
+    user: user
+  )
+  random_question.tags.create(name: Faker::Alphanumeric.alphanumeric(number: rand(7..15)))
+end
+
 puts "\nUser: #{user.inspect}"
 puts "Question: #{question.inspect}"
 puts "Tag: #{tag.inspect}"
