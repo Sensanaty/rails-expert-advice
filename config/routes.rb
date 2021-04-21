@@ -6,7 +6,8 @@ Rails.application.routes.draw do
       get '/users/me', to: 'users#me'
       resources :users
       resources :questions
-      resources :tags
+      resources :tags, only: [:index, :show]
+      resources :answers, only: [:index, :create, :update, :destroy]
     end
   end
 end
