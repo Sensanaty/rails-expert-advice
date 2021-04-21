@@ -12,9 +12,14 @@ puts "Creating Doorkeeper application"
 Doorkeeper::Application.create(name: "expert_advice_web", redirect_uri: "http://localhost:3000/")
 
 puts "Creating a user"
+
 puts "\nemail: user@email.com"
 puts "password: password"
-user = User.create(email: "user@email.com", password: "password")
+user = User.create(email: "user@email.com", password: "password", password_confirmation: "password")
+account = user.accounts.build
+AccountUser.new(user: user, account: account)
+
+user.save
 
 puts "\nCreating a question belonging to the user"
 question = Question.create(
