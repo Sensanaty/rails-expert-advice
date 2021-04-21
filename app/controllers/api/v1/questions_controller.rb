@@ -57,7 +57,7 @@ module Api
       end
 
       def set_question
-        @question = Question.find(question_params[:id])
+        @question = Question.find(params[:id])
       end
 
       def authorize_owner
