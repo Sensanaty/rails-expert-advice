@@ -6,7 +6,7 @@ module Api
       before_action :authorize_owner, except: %i[index show create]
 
       def index
-        @answers = Answer.all
+        @answers = Answer.all.order(created_at: :desc)
         render json: AnswerSerializer.new(@answers).serializable_hash.to_json, status: :ok
       end
 
@@ -15,7 +15,9 @@ module Api
       end
 
       def create
-        @answer = Answer.new(answer_params)
+        @answer = Answer.new(content: answer_params[:content],
+                             user_id: answer_params[:'user-id'],
+                             question_id: answer_params[:'question-id'])
 
         if @answer.save
           render json: AnswerSerializer.new(@answer).serializable_hash.to_json, status: :ok
