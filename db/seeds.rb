@@ -28,22 +28,28 @@ Question.create(
   user: user
 )
 
-puts "Creating a tag belonging to the question"
-tag = Question.first.tags.create(name: "question-tag")
-second_tag = Question.first.tags.create(name: "second-tag")
-
 puts "Creating 20 questions with random content"
 
 20.times do
   Question.create(
-    title: (Faker::Quote.famous_last_words).gsub!(/\.\z/, "?"),
+    title: (Faker::Quote.famous_last_words).gsub!(/[.!]\z/, "?"),
     content: Faker::Lorem.paragraphs(number: rand(15..25)).join("\n"),
     user: user
   )
 end
 
-puts "\nUser: #{user.inspect}"
-puts "Tag: #{tag.inspect}"
-puts "Second Tag: #{second_tag.inspect}"
+puts "Creating answers for every question"
+
+Question.all.each do |question|
+  rand(5..10).times do
+    Answer.create(
+      content: Faker::Food.description,
+      user: user,
+      question: question
+    )
+  end
+
+  question.tags.create(name: "question-tag")
+end
 
 puts "\nSeeding done!"
