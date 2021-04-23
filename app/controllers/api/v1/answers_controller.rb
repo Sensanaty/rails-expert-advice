@@ -1,19 +1,23 @@
 module Api
   module V1
-    class AnswersController < ApplicationController
+    class AnswersController < Api::V1::ApiController
       before_action :set_answer, except: %i[index create]
-      before_action :doorkeeper_authorize!, except: [:index]
-      before_action :authorize_owner, except: %i[index create]
+      before_action :doorkeeper_authorize!, except: [:index, :show]
+      before_action :authorize_owner, except: %i[index show create]
 
       def index
-        @pagy, @answers = pagy(Answer.where(question_id: params[:question_id]), items: 10)
-        render json: AnswerSerializer
-          .new(@answers, meta: { pagy: pagy_metadata(@pagy) })
-          .serializable_hash.to_json, status: :ok
+        @answers = Answer.all.order(created_at: :desc)
+        render json: AnswerSerializer.new(@answers).serializable_hash.to_json, status: :ok
+      end
+
+      def show
+        render json: AnswerSerializer.new(@answer).serializable_hash.to_json, status: :ok
       end
 
       def create
-        @answer = Answer.new(answer_params)
+        @answer = Answer.new(content: answer_params[:content],
+                             user_id: answer_params[:'user-id'],
+                             question_id: answer_params[:'question-id'])
 
         if @answer.save
           render json: AnswerSerializer.new(@answer).serializable_hash.to_json, status: :ok
@@ -23,7 +27,7 @@ module Api
       end
 
       def update
-        if @answer.update_attributes(content: params[:content])
+        if @answer.update(content: answer_params[:content])
           render json: AnswerSerializer.new(@answer).serializable_hash.to_json, status: :ok
         else
           render json: { error: @answer.errors }, status: :unprocessable_entity
@@ -41,7 +45,7 @@ module Api
       private
 
       def answer_params
-        params.permit(:id, :content, :user_id, :question_id)
+        params.require(:data).require(:attributes).permit(:id, :content, :'user-id', :'question-id')
       end
 
       def set_answer
