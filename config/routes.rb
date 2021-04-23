@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       resources :users
       resources :questions
       resources :tags, only: [:index, :show]
-      resources :answers, only: [:index, :create, :update, :destroy]
+      resources :answers, only: [:index, :show, :create, :update, :destroy]
     end
   end
 end

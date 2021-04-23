@@ -1,13 +1,17 @@
 module Api
   module V1
-    class AnswersController < ApplicationController
+    class AnswersController < Api::V1::ApiController
       before_action :set_answer, except: %i[index create]
-      before_action :doorkeeper_authorize!, except: [:index]
-      before_action :authorize_owner, except: %i[index create]
+      before_action :doorkeeper_authorize!, except: [:index, :show]
+      before_action :authorize_owner, except: %i[index show create]
 
       def index
         @answers = Answer.all
         render json: AnswerSerializer.new(@answers).serializable_hash.to_json, status: :ok
+      end
+
+      def show
+        render json: AnswerSerializer.new(@answer).serializable_hash.to_json, status: :ok
       end
 
       def create
@@ -21,7 +25,7 @@ module Api
       end
 
       def update
-        if @answer.update_attributes(content: params[:content])
+        if @answer.update(content: answer_params[:content])
           render json: AnswerSerializer.new(@answer).serializable_hash.to_json, status: :ok
         else
           render json: { error: @answer.errors }, status: :unprocessable_entity

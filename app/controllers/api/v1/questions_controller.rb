@@ -31,8 +31,7 @@ module Api
       end
 
       def update
-        if @question.update_attributes(title: params[:title] || @question.title,
-                                       content: params[:content] || @question.content)
+        if @question.update(title: question_params[:title], content: question_params[:content])
 
           modify_question_tags(@question.tags, params[:tags])
           render json: QuestionSerializer.new(@question).serializable_hash.to_json, status: :ok
