@@ -7,13 +7,13 @@ module Api
 
       def index
         @pagy, @questions = pagy(Question.all)
-        render json: QuestionSerializer.new(@questions, meta: { pagy: pagy_metadata(@pagy) }).serializable_hash.to_json
+        render json: QuestionSerializer.new(@questions, meta: pagy_metadata(@pagy)).serializable_hash.to_json
       end
 
       def create
         @question = Question.new(title: question_params[:title],
                                  content: question_params[:content],
-                                 user_id: question_params[:user_id])
+                                 user_id: question_params[:'user-id'])
 
         if @question.save
           @tag = question_params[:tags]
@@ -25,7 +25,9 @@ module Api
       end
 
       def show
-        render json: QuestionSerializer.new(@question).serializable_hash.to_json
+        options = {}
+        options[:include] = [:answers]
+        render json: QuestionSerializer.new(@question, options).serializable_hash.to_json
       end
 
       def update
@@ -53,7 +55,7 @@ module Api
 
       def question_params
         # Not sure why permit(details: { :title, :content, :user_id }, tags: []) doesn't work
-        params.permit(:id, :title, :content, :user_id, tags: [])
+        params.require(:data).require(:attributes).permit(:id, :title, :content, :'user-id', tags: [])
       end
 
       def set_question

@@ -6,10 +6,8 @@ module Api
       before_action :authorize_owner, except: %i[index create]
 
       def index
-        @pagy, @answers = pagy(Answer.where(question_id: params[:question_id]), items: 10)
-        render json: AnswerSerializer
-          .new(@answers, meta: { pagy: pagy_metadata(@pagy) })
-          .serializable_hash.to_json, status: :ok
+        @answers = Answer.all
+        render json: AnswerSerializer.new(@answers).serializable_hash.to_json, status: :ok
       end
 
       def create
@@ -41,7 +39,7 @@ module Api
       private
 
       def answer_params
-        params.permit(:id, :content, :user_id, :question_id)
+        params.require(:data).require(:attributes).permit(:id, :content, :'user-id', :'question-id')
       end
 
       def set_answer
