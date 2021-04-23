@@ -22,10 +22,10 @@ gem 'jsonapi-serializer'
 gem 'pagy'
 gem 'rack-cors'
 gem 'validates_email_format_of'
+gem 'faker'
 
 group :development, :test do
   gem 'factory_bot_rails'
-  gem 'faker'
   gem 'pry'
   gem 'rspec-rails'
   gem 'rubocop'
