@@ -6,7 +6,7 @@ module Api
       before_action :authorize_owner, only: %i[update destroy]
 
       def index
-        @pagy, @questions = pagy(Question.all)
+        @pagy, @questions = pagy(Question.all.order(created_at: :desc))
         render json: QuestionSerializer.new(@questions, meta: pagy_metadata(@pagy)).serializable_hash.to_json
       end
 
